@@ -1,0 +1,16 @@
+name: deploy react
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v2
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t domdom10/CI_TEST -f Dockerfile.dev .
+      - run: docker run -e CI=true domdom10/CI_TEST npm run test
+
